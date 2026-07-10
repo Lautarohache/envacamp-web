@@ -47,7 +47,18 @@
 
   document.querySelectorAll('[data-goto-tab]').forEach(function (el) {
     el.addEventListener('click', function () {
-      activateTab(el.dataset.gotoTab);
+      var category = el.dataset.gotoTab;
+      activateTab(category);
+      var form = document.getElementById('form-' + category);
+      if (!form) return;
+      if (el.dataset.presetUso) {
+        var usoSelect = form.querySelector('[name=uso]');
+        if (usoSelect) usoSelect.value = el.dataset.presetUso;
+      }
+      if (el.dataset.presetProducto) {
+        var productoSelect = form.querySelector('[name=producto]');
+        if (productoSelect) productoSelect.value = el.dataset.presetProducto;
+      }
     });
   });
 
@@ -98,6 +109,7 @@
       return {
         title: 'Bolsa de Polietileno',
         lines: [
+          'Producto: ' + data.producto,
           'Uso: ' + data.uso,
           'Espesor: ' + micronaje,
           'Medida: ' + medidaPoli,

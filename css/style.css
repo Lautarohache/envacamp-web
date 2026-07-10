@@ -141,6 +141,22 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 .cat-body p { color: var(--ink-soft); font-size: .92rem; margin: 0 0 14px; }
 .cat-link { color: var(--magenta); font-weight: 700; font-size: .88rem; }
 
+/* ============ Product detail (variantes) ============ */
+.product-detail { background: var(--white); }
+.product-detail.alt-bg { background: var(--kraft); }
+.back-link { display: inline-block; color: var(--magenta); font-weight: 700; font-size: .88rem; margin-bottom: 18px; }
+.variant-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.variant-grid-6 { grid-template-columns: repeat(6, 1fr); }
+.variant-card {
+  display: block; background: #fff; border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow-sm); transition: transform .2s ease, box-shadow .2s ease; border: 1px solid var(--kraft-line);
+}
+.variant-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+.variant-photo { height: 150px; background-size: cover; background-position: center; }
+.variant-icon { height: 150px; display: flex; align-items: center; justify-content: center; background: var(--kraft); color: var(--green-dark); }
+.variant-icon svg { width: 68px; height: 68px; }
+.variant-label { padding: 16px 12px; text-align: center; font-weight: 800; color: var(--green-dark); font-size: .95rem; }
+
 /* ============ Builder ============ */
 .builder { background: var(--kraft); }
 .builder-box { background: #fff; border-radius: 20px; box-shadow: var(--shadow); overflow: hidden; }
@@ -260,7 +276,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 
 /* ============ Responsive ============ */
 @media (max-width: 900px) {
-  .cat-grid, .clients-grid { grid-template-columns: repeat(2, 1fr); }
+  .cat-grid, .clients-grid, .variant-grid { grid-template-columns: repeat(2, 1fr); }
+  .variant-grid-6 { grid-template-columns: repeat(3, 1fr); }
   .about-grid { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -275,6 +292,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
   .main-nav a { padding: 12px 0; border-bottom: 1px solid var(--kraft-line); }
   .nav-toggle { display: flex; }
   .cat-grid, .clients-grid { grid-template-columns: 1fr; }
+  .variant-grid, .variant-grid-6 { grid-template-columns: repeat(2, 1fr); }
   .form-grid { grid-template-columns: 1fr; }
   .section { padding: 60px 0; }
   .hero { min-height: 92vh; }
