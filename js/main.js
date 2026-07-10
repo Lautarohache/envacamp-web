@@ -7,7 +7,7 @@
   var CATEGORY_LABELS = {
     rafia: 'Bolsas de Rafia',
     polietileno: 'Bolsas de Polietileno',
-    hilos: 'Hilos y Rafia suelta'
+    hilos: 'Hilos y Cajas'
   };
 
   var cart = loadCart();
@@ -59,6 +59,13 @@
         var productoSelect = form.querySelector('[name=producto]');
         if (productoSelect) productoSelect.value = el.dataset.presetProducto;
       }
+      if (el.dataset.presetCategoria) {
+        var categoriaSelect = form.querySelector('[name=categoria]');
+        if (categoriaSelect) {
+          categoriaSelect.value = el.dataset.presetCategoria;
+          categoriaSelect.dispatchEvent(new Event('change'));
+        }
+      }
     });
   });
 
@@ -70,6 +77,30 @@
     select.addEventListener('change', function () {
       customField.hidden = select.value !== 'custom';
     });
+  });
+
+  /* ---------------- Hilos / Cajas toggle ---------------- */
+  document.querySelectorAll('.js-hilos-categoria').forEach(function (select) {
+    var form = select.closest('form');
+    function sync() {
+      var isCajas = select.value === 'Cajas';
+      form.querySelectorAll('.hilos-only').forEach(function (el) { el.hidden = isCajas; });
+      form.querySelectorAll('.cajas-only').forEach(function (el) { el.hidden = !isCajas; });
+    }
+    select.addEventListener('change', sync);
+    sync();
+  });
+
+  /* ---------------- Checkbox groups (max 2) ---------------- */
+  document.querySelectorAll('.checkbox-group').forEach(function (group) {
+    var boxes = group.querySelectorAll('input[type=checkbox]');
+    function sync() {
+      var checkedCount = Array.prototype.filter.call(boxes, function (b) { return b.checked; }).length;
+      boxes.forEach(function (b) {
+        if (!b.checked) b.disabled = checkedCount >= 2;
+      });
+    }
+    boxes.forEach(function (b) { b.addEventListener('change', sync); });
   });
 
   /* ---------------- Cart persistence ---------------- */
@@ -96,7 +127,6 @@
         title: 'Bolsa de Rafia — ' + data.tipo,
         lines: [
           'Producto: ' + data.uso,
-          'Color: ' + data.color,
           'Medida/Capacidad: ' + medida,
           'Cantidad: ' + data.cantidad + ' ' + data.unidad,
           data.impresion ? 'Impresión personalizada: Sí' : null
@@ -106,23 +136,30 @@
     if (category === 'polietileno') {
       var micronaje = data.micronaje === 'custom' ? (data.micronaje_custom || 'A definir') : data.micronaje;
       var medidaPoli = (data.ancho && data.alto) ? (data.ancho + 'x' + data.alto + ' cm') : 'A definir';
+      var tipoList = Array.isArray(data.tipo) ? data.tipo.filter(Boolean) : (data.tipo ? [data.tipo] : []);
       return {
         title: 'Bolsa de Polietileno',
         lines: [
           'Producto: ' + data.producto,
-          'Uso: ' + data.uso,
+          tipoList.length ? 'Tipo: ' + tipoList.join(', ') : null,
           'Espesor: ' + micronaje,
           'Medida: ' + medidaPoli,
           'Cantidad: ' + data.cantidad + ' ' + data.unidad
-        ]
+        ].filter(Boolean)
       };
     }
     if (category === 'hilos') {
+      if (data.categoria === 'Cajas') {
+        return {
+          title: 'Cajas — ' + data.tipo_caja,
+          lines: [
+            'Cantidad: ' + data.cantidad + ' ' + data.unidad
+          ]
+        };
+      }
       return {
-        title: data.tipo,
+        title: 'Hilos — ' + data.tipo_hilo,
         lines: [
-          'Presentación: ' + data.presentacion,
-          'Color: ' + data.color,
           'Cantidad: ' + data.cantidad + ' ' + data.unidad
         ]
       };
@@ -133,10 +170,14 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var category = form.dataset.panel;
+      var formData = new FormData(form);
       var data = {};
-      new FormData(form).forEach(function (value, key) {
+      formData.forEach(function (value, key) {
         data[key] = value;
       });
+      if (category === 'polietileno') {
+        data.tipo = formData.getAll('tipo');
+      }
       data.impresion = form.querySelector('[name=impresion]') ? form.querySelector('[name=impresion]').checked : false;
 
       var item = describeItem(category, data);
@@ -152,6 +193,9 @@
       form.reset();
       var customField = form.querySelector('.custom-size');
       if (customField) customField.hidden = true;
+      form.querySelectorAll('.checkbox-group input[type=checkbox]').forEach(function (b) { b.disabled = false; });
+      var categoriaSelect = form.querySelector('.js-hilos-categoria');
+      if (categoriaSelect) categoriaSelect.dispatchEvent(new Event('change'));
     });
   });
 

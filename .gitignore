@@ -2,3 +2,5 @@
 node_modules/
 .claude/
 instagram/
+MULTIMEDIA/*
+!MULTIMEDIA/LOGO.png
