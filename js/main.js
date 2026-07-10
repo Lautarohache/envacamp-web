@@ -127,7 +127,7 @@
         title: 'Bolsa de Rafia — ' + data.tipo,
         lines: [
           'Producto: ' + data.uso,
-          'Medida/Capacidad: ' + medida,
+          'Medida: ' + medida,
           'Cantidad: ' + data.cantidad + ' ' + data.unidad,
           data.impresion ? 'Impresión personalizada: Sí' : null
         ].filter(Boolean)
