@@ -278,5 +278,14 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
   .form-grid { grid-template-columns: 1fr; }
   .section { padding: 60px 0; }
   .hero { min-height: 92vh; }
-  .header-inner { height: 70px; }
+  .header-inner { height: 70px; gap: 10px; }
+}
+
+@media (max-width: 480px) {
+  .logo-tag { display: none; }
+  .logo-img { height: 42px; }
+  .header-actions { gap: 8px; }
+  .btn-whatsapp.btn-sm { width: 44px; height: 44px; padding: 0; border-radius: 50%; }
+  .btn-whatsapp.btn-sm span { display: none; }
+  .btn-whatsapp.btn-sm .icon { width: 22px; height: 22px; }
 }
