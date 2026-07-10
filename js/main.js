@@ -120,9 +120,7 @@
   /* ---------------- Forms -> add to cart ---------------- */
   function describeItem(category, data) {
     if (category === 'rafia') {
-      var medida = data.capacidad === 'custom'
-        ? (data.ancho && data.alto ? data.ancho + 'x' + data.alto + ' cm' : 'Medida a definir')
-        : data.capacidad;
+      var medida = (data.ancho && data.alto) ? (data.ancho + 'x' + data.alto + ' cm') : 'A definir';
       return {
         title: 'Bolsa de Rafia — ' + data.tipo,
         lines: [
